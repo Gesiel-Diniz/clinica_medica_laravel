@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Appointment;
 
 class AppointmentController extends Controller
 {
@@ -13,7 +14,11 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        //
+        return Appointment::select('appointments.*', 'attendants.name AS name_attendants', 'doctors.name AS name_doctors', 'patients.name AS name_patients')
+            ->join('attendants', 'attendants.id', '=', 'appointments.attendants_id')
+            ->join('doctors', 'doctors.id', '=', 'appointments.doctors_id')
+            ->join('patients', 'patients.id', '=', 'appointments.patients_id')
+            ->get();
     }
 
     /**
@@ -23,7 +28,7 @@ class AppointmentController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -34,7 +39,15 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $appointment = new Appointment;
+        $appointment->attendants_id = $request->input('attendants_id.id');
+        $appointment->patients_id = $request->input('patients_id.id');
+        $appointment->doctors_id = $request->input('doctors_id.id');
+        $appointment->obs = $request->input('obs');
+        $appointment->data_time = $request->input('data_time');
+        $appointment->value = $request->input('valor');
+        $appointment->save();
+        return $request;
     }
 
     /**
@@ -45,7 +58,14 @@ class AppointmentController extends Controller
      */
     public function show($id)
     {
-        //
+        $appointment = Appointment::select('appointments.*', 'attendants.name AS name_attendants', 'doctors.name AS name_doctors', 'patients.name AS name_patients')
+            ->join('attendants', 'attendants.id', '=', 'appointments.attendants_id')
+            ->join('doctors', 'doctors.id', '=', 'appointments.doctors_id')
+            ->join('patients', 'patients.id', '=', 'appointments.patients_id')
+            ->where('appointments.id', '=', $id)
+            ->get();
+
+            return var_export($appointment->collection()->id);
     }
 
     /**

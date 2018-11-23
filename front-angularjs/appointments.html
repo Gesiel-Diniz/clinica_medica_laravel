@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<title>Appointments</title>
+</head>
+<body ng-controller="appointmentsController">
+	<div style="position: fixed; width: 100%" ng-include="'fragments-layouts/nav-bar.htm'"></div>
+	<br/>
+	<!-- List -->
+	<div style="margin-top: 50px;" class="container" data-ng-init="listAppointments()">
+		<h4>Appointments <button class="btn btn-success btn-sm" ng-click="clear()" >+New</button></h4> 
+		<br>
+		<div class="row" >
+			<div ng-repeat="(key, value) in appointments | orderBy : '-data_time'" class="col-md-4"  >
+				<div class="card text-white bg-success mb-3" style="max-width: 20rem;" >
+				  	<div class="card-header"><strong>Patient: </strong>{{value.name_patients}}</div>
+				  	<div class="card-body">
+					    <span class="card-text"><strong>Attendant: </strong>{{value.name_attendants}}</span>
+					    <br>
+					    <span class="card-text"><strong>Doctor: </strong>{{value.name_doctors}}</span>
+					    <br>
+					    <span class="card-text"><strong>Data: </strong>{{value.data_time}}</span>
+					    <br>
+					    <span class="card-text"><strong>Value: </strong>{{value.value}}</span>
+				  	</div>
+				  	<div class="card-footer">
+				  		<div class="float-right">
+							<button class="btn btn-danger btn-sm" ng-click="delete(value.id)">Delete</button>
+						    <button type="button" class="btn btn-info btn-sm" ng-click="getEdit(value.id)">Edit</button>
+						</div>
+				  	</div>
+				</div>
+			</div>
+		</div>
+		
+		<div style="width: 100%" ng-show="erro" ng-include="'fragments-layouts/erro-danger.htm'"></div>
+	</div>
+	<!-- Fim List -->
+
+	<!-- Modal New -->
+	<div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	  	<div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+		      	<div class="modal-header">
+			        <h5 class="modal-title">Appointment</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			         	<span aria-hidden="true">&times;</span>
+			        </button>
+			    </div>
+
+			    <div class="modal-body">
+		        	<form name="new_appointment">
+		        		<div class="row">
+							<div class="form-group col-md-4" data-ng-init="listAttendants()">
+							  	Attendant<br>
+							  	<select class="form-control" ng-options="attendant as attendant.name for attendant in attendants | orderBy:'name' track by attendant.id" ng-model="appointment.attendants_id" name="attendants_id" id="attendants_id">
+							  		<option value="">Select</option>
+							  	</select>
+							  	<input type="hidden" class="form-control" name="id" id="id" ng-model="id"/>
+							</div>
+							<div class="form-group col-md-4" data-ng-init="listPatients()">
+							  	Patient<br>
+							  	<select class="form-control" ng-options="patient as patient.name for patient in patients | orderBy:'name' track by patient.id" ng-model="appointment.patients_id">
+							  		<option value="">Select</option>
+							  	</select>
+							</div>
+							<div class="form-group col-md-4" data-ng-init="listDoctors()">
+							  	Doctor<br>
+							  	<select class="form-control" ng-options="doctor as doctor.name for doctor in doctors | orderBy:'name' track by doctor.id" ng-model="appointment.doctors_id">
+							  		<option value="">Select</option>
+							  	</select>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-group col-md-12">
+								Observations<br>
+								<textarea class="form-control" rows="5" ng-model="appointment.obs"></textarea>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="form-group col-md-4">
+							  	Date and Time<br>
+							  	<input type="datetime-local" class="form-control" ng-model="appointment.data_t"/>
+							</div>
+							
+							<div class="form-group col-md-3">
+							  	Value($)<br>
+							  	<input type="number" class="form-control" ng-model="appointment.valor" ng-pattern="'\.{3,7}'"/>
+							</div>
+						</div>
+		        	</form>
+		        	<div style="width: 100%" ng-show="erro_form" ng-include="'fragments-layouts/erro-danger.htm'"></div>
+		      	</div>
+		      	<div class="modal-footer">
+			        <button type="button" class="btn btn-primary" ng-click="save()">Save</button>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      	</div>
+		    </div>
+	  	</div>
+	</div>
+	<!-- Fim Modal New -->
+
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/controllers/appointments.js"></script>
+</body>
+</html>

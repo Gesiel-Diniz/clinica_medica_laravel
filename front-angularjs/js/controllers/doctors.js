@@ -1,9 +1,12 @@
 var app = angular.module('app', []);
 
-urlService = "http://127.0.0.1:8000/api/specialties";
+urlService = "http://127.0.0.1:8000/api/doctors";
 
-app.controller('specialtiesController', function($scope, $http) {
+app.controller('doctorsController', function($scope, $http) {
 
+	
+	$scope.doctors = [];
+	$scope.doctor = [];
 	$scope.specialties = [];
 	$scope.erro = false;
 
@@ -13,7 +16,7 @@ app.controller('specialtiesController', function($scope, $http) {
 	        method : "GET",
 	        url : urlService
 	    }).then(function mySuccess(response) {
-	        $scope.specialties = response.data;
+	        $scope.doctors = response.data;
 	        $scope.erro = false;
 	    }, function myError(response) {
 	        $scope.erroMsg = response.statusText;
@@ -44,14 +47,20 @@ app.controller('specialtiesController', function($scope, $http) {
 
 	$scope.getEdit = function(id){
 
-		$scope.clear();
-
 		$http({
 	        method : "GET",
 	        url : urlService+"/"+id
 	    }).then(function mySuccess(response) {
-	    	$scope.name = response.data.name;
-	    	$scope.id = response.data.id;
+
+	    	$scope.clear();
+
+	    	$scope.doctor = response.data[0];
+
+	    	$scope.doctor.specialties_id = {
+	    		id : $scope.doctor.id_specialties, 
+	    		name : $scope.doctor.name_specialties
+	    	};
+
 	    }, function myError(response) {
 	        $scope.erroMsg = response.statusText;
 	        $scope.erroCod = response.status;
@@ -60,16 +69,38 @@ app.controller('specialtiesController', function($scope, $http) {
 
 	}
 
-	$scope.name = '';
-
 	$scope.save = function(){
 	
 		var error = false;
 		var msg = "";
 
-		if(! $scope.name){
+		if(! $scope.doctor.appointment_value){
+			error = true;
+			msg = 'O campo Value é obrigatório!';
+		}
+		if(! $scope.doctor.celular){
+			error = true;
+			msg = 'O campo MOBILE é obrigatório!';
+		}
+		if(! $scope.doctor.email){
+			error = true;
+			msg = 'O campo E-MAIL é obrigatório !';
+		}
+		if(! $scope.doctor.address){
+			error = true;
+			msg = 'O campo ADDRESS é obrigatório!';
+		}
+		if(! $scope.doctor.number_register){
+			error = true;
+			msg = 'O campo NUMBER OF REGISTER é obrigatório!';
+		}
+		if(! $scope.doctor.specialties_id){
 			error = true;
 			msg = 'O campo SPECIALTIE é obrigatório!';
+		}
+		if(! $scope.doctor.name){
+			error = true;
+			msg = 'O campo NAME é obrigatório!';
 		}
 
 		$scope.erro_form = error;
@@ -78,22 +109,22 @@ app.controller('specialtiesController', function($scope, $http) {
 			$scope.erroMsg = msg;
 		}else{
 
-			if($scope.id){
-				url = urlService+"/"+$scope.id;
+			if($scope.doctor.id){
+				url = urlService+"/"+$scope.doctor.id;
 				method = "PUT";
 			}else{
 				url = urlService
 				method = "POST";
 			}
 
-			var data = {
-				name: $scope.name
-			};
+			$scope.doctor.specialties_id = $scope.doctor.specialties_id.id;
+
+			$('#form').modal('toggle');
 
 			$http({
 		        method : method,
 		        url : url,
-		        data: data
+		        data: $scope.doctor
 		    }).then(function mySuccess(response) {
 		    	$scope.list();
 		    }, function myError(response) {
@@ -102,19 +133,29 @@ app.controller('specialtiesController', function($scope, $http) {
 		        $scope.erro = true;
 		    });
 
-		    $('#form').modal('toggle');
-
 		}
 	
 	}
 
 	$scope.clear = function(){
-
 		$('#form').modal('toggle');
+		$scope.doctor = null;
+	}
 
-		$scope.name = null;
-		$scope.id = null;
-		$scope.erro_form = false;
+	$scope.listSpecialties = function(){
+
+	    $http({
+	        method : "GET",
+	        url :"http://127.0.0.1:8000/api/specialties"
+	    }).then(function mySuccess(response) {
+	        $scope.specialties = response.data;
+	        $scope.erro = false;
+	    }, function myError(response) {
+	        $scope.erroMsg = response.statusText;
+	        $scope.erroCod = response.status;
+	        $scope.erro = true;
+	    });
+
 	}
 
 });

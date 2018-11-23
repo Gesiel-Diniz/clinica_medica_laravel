@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Patient;
 
 class PatientController extends Controller
 {
@@ -13,7 +14,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        //
+        return Patient::get();
     }
 
     /**
@@ -34,7 +35,13 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $patient = new Patient;
+        $patient->name = $request->input('name');
+        $patient->address = $request->input('address');
+        $patient->telefone = $request->input('telefone');
+        $patient->celular = $request->input('celular');
+        $patient->save();
+        return [];
     }
 
     /**
@@ -45,7 +52,7 @@ class PatientController extends Controller
      */
     public function show($id)
     {
-        //
+        return Patient::findOrFail($id);
     }
 
     /**
@@ -56,7 +63,6 @@ class PatientController extends Controller
      */
     public function edit($id)
     {
-        //
     }
 
     /**
@@ -68,7 +74,12 @@ class PatientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $patient = Patient::find($id);
+        $patient->name = $request->input('name');
+        $patient->address = $request->input('address');
+        $patient->telefone = $request->input('telefone');
+        $patient->celular = $request->input('celular');
+        $patient->save();
     }
 
     /**
@@ -79,6 +90,8 @@ class PatientController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $patient = Patient::find($id);
+        $patient->delete();
+        return [];
     }
 }

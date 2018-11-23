@@ -16,6 +16,6 @@ class Doctor extends Model
 
     public function doctortSpecialtie()
     {
-        return $this->belongsTo('App\Models\Specialtie');
+        return $this->belongsTo('App\Models\Specialtie', 'specialties_id');
     }
 }

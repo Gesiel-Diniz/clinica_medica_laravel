@@ -60,7 +60,7 @@ class SpecialtieController extends Controller
      */
     public function edit($id)
     {
-        return Specialtie::findOrFail($id);
+
     }
 
     /**
@@ -72,7 +72,6 @@ class SpecialtieController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $specialtie = new Specialtie;
         $specialtie = Specialtie::find($id);
         $specialtie->name = $request->input('name');
         $specialtie->save();
@@ -86,7 +85,6 @@ class SpecialtieController extends Controller
      */
     public function destroy($id)
     {
-        $specialtie = new Specialtie;
         $specialtie = Specialtie::find($id);
         $specialtie->delete();
         return [];

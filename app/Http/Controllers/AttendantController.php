@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Attendant;
 
 class AttendantController extends Controller
 {
@@ -13,7 +14,7 @@ class AttendantController extends Controller
      */
     public function index()
     {
-        //
+        return Attendant::get();
     }
 
     /**
@@ -34,7 +35,12 @@ class AttendantController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $attendant = new Attendant;
+        $attendant->name = $request->input('name');
+        $attendant->email = $request->input('email');
+        $attendant->telefone = $request->input('telefone');
+        $attendant->save();
+        return [];
     }
 
     /**
@@ -45,7 +51,7 @@ class AttendantController extends Controller
      */
     public function show($id)
     {
-        //
+        return Attendant::findOrFail($id);
     }
 
     /**
@@ -56,7 +62,7 @@ class AttendantController extends Controller
      */
     public function edit($id)
     {
-        //
+        
     }
 
     /**
@@ -68,7 +74,11 @@ class AttendantController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $attendant = Attendant::find($id);
+        $attendant->name = $request->input('name');
+        $attendant->email = $request->input('email');
+        $attendant->telefone = $request->input('telefone');
+        $attendant->save();
     }
 
     /**
@@ -79,6 +89,8 @@ class AttendantController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $attendant = Attendant::find($id);
+        $attendant->delete();
+        return [];
     }
 }

@@ -5,26 +5,28 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-	<title>Specialties</title>
+	<title>Attendants</title>
 </head>
-<body ng-controller="specialtiesController">
+<body ng-controller="attendantsController">
 	<div style="position: fixed; width: 100%" ng-include="'fragments-layouts/nav-bar.htm'"></div>
 	<br/>
 	<!-- List -->
 	<div style="margin-top: 50px;" class="container" data-ng-init="list()">
-		<h4>Specialties list</h4>
+		<h4>Attendants list</h4>
 		<table class="table table-striped table-sm table-hover">
 			<thead>
 				<tr>
 					<th>ID</th>
-					<th>SPECIALTIE</th>
+					<th>NAME</th>
+					<th>E-EMAIL</th>
 					<th style="text-align: right;"><button class="btn btn-success btn-sm" ng-click="clear()" >+New</button></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="(key, value) in specialties  | orderBy : '-id'">
+				<tr ng-repeat="(key, value) in attendants | orderBy : '-id'">
 					<td>{{value.id}}</td>
 					<td>{{value.name}}</td>
+					<td>{{value.email}}</td>
 					<td style="text-align: right;">
 						<button type="button" class="btn btn-outline-info btn-sm" ng-click="getEdit(value.id)">Edit</button>
 						<button class="btn btn-outline-danger btn-sm" ng-click="delete(value.id)">Delete</button>
@@ -41,18 +43,32 @@
 	  	<div class="modal-dialog">
 		    <div class="modal-content">
 		      	<div class="modal-header">
-			        <h5 class="modal-title">New Specialtie</h5>
+			        <h5 class="modal-title">Attendants</h5>
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			         	<span aria-hidden="true">&times;</span>
 			        </button>
 			    </div>
 
 			    <div class="modal-body">
-		        	<form name="new_specialtie">
-		        		<div class="form-group">
-						  	Specialtie<br>
-						  	<input type="text" class="form-control" ng-model="name" ng-pattern="'\.{3,100}'"/>
-						  	<input type="hidden" ng-model="id" value="" />
+		        	<form name="new_patient">
+		        		<div class="row">
+			        		<div class="form-group col-md-12">
+							  	Name<br>
+							  	<input type="text" class="form-control" ng-model="name" ng-pattern="'\.{3,100}'"/>
+							  	<input type="hidden" ng-model="id" value="" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-12">
+							  	E-mail<br>
+							  	<input type="text" class="form-control" ng-model="email" ng-pattern="'\.{3,100}'"/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+							  	Telefone<br>
+							  	<input type="telefone" class="form-control" ng-model="telefone" ng-pattern="'\.{3,15}'"/>
+							</div>
 						</div>
 		        	</form>
 		        	<div style="width: 100%" ng-show="erro_form" ng-include="'fragments-layouts/erro-danger.htm'"></div>
@@ -70,6 +86,6 @@
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/angular.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="js/controllers/specialties.js"></script>
+	<script type="text/javascript" src="js/controllers/attendants.js"></script>
 </body>
 </html>

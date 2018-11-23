@@ -1,10 +1,10 @@
 var app = angular.module('app', []);
 
-urlService = "http://127.0.0.1:8000/api/specialties";
+urlService = "http://127.0.0.1:8000/api/attendants";
 
-app.controller('specialtiesController', function($scope, $http) {
+app.controller('attendantsController', function($scope, $http) {
 
-	$scope.specialties = [];
+	$scope.attendants = [];
 	$scope.erro = false;
 
 	$scope.list = function(){
@@ -13,7 +13,7 @@ app.controller('specialtiesController', function($scope, $http) {
 	        method : "GET",
 	        url : urlService
 	    }).then(function mySuccess(response) {
-	        $scope.specialties = response.data;
+	        $scope.attendants = response.data;
 	        $scope.erro = false;
 	    }, function myError(response) {
 	        $scope.erroMsg = response.statusText;
@@ -50,8 +50,10 @@ app.controller('specialtiesController', function($scope, $http) {
 	        method : "GET",
 	        url : urlService+"/"+id
 	    }).then(function mySuccess(response) {
-	    	$scope.name = response.data.name;
 	    	$scope.id = response.data.id;
+	    	$scope.name = response.data.name;
+	    	$scope.email = response.data.email;
+	    	$scope.telefone = response.data.telefone;
 	    }, function myError(response) {
 	        $scope.erroMsg = response.statusText;
 	        $scope.erroCod = response.status;
@@ -67,9 +69,17 @@ app.controller('specialtiesController', function($scope, $http) {
 		var error = false;
 		var msg = "";
 
+		if(! $scope.telefone){
+			error = true;
+			msg = 'O campo TELEFONE é obrigatório!';
+		}
+		if(! $scope.email){
+			error = true;
+			msg = 'O campo E-MAIL é obrigatório !';
+		}
 		if(! $scope.name){
 			error = true;
-			msg = 'O campo SPECIALTIE é obrigatório!';
+			msg = 'O campo NAME é obrigatório!';
 		}
 
 		$scope.erro_form = error;
@@ -87,7 +97,9 @@ app.controller('specialtiesController', function($scope, $http) {
 			}
 
 			var data = {
-				name: $scope.name
+				name: $scope.name,
+				email: $scope.email,
+				telefone: $scope.telefone
 			};
 
 			$http({
@@ -113,6 +125,8 @@ app.controller('specialtiesController', function($scope, $http) {
 		$('#form').modal('toggle');
 
 		$scope.name = null;
+		$scope.email = null;
+		$scope.telefone = null;
 		$scope.id = null;
 		$scope.erro_form = false;
 	}
